@@ -3,84 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+    <title>player</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
 </head>
 <body>
+    <audio src="" id="audio"></audio>
 
-<audio src="" id="audio"></audio>
+<nav class="navigation">
+    <span class="nav-bar">
+        <i class="fas fa-bars"></i>
+    </span>
+    <span class="search-container">
+        <input type="search" class="search" placeholder="search">
+        <i class="fas fa-search search-btn"></i>
+    </span>
+</nav>
 
-
-<div class="menu">=</div>
-    <div class="nav-bar">
-    <span class="exit">X</span>
-    <div class="menu-title">menu</div>
-    <ul class="menu-lists">
-        <li class="menu-list">
-            favorite
-        </li>
-        <li class="menu-list">
-            favorite
-        </li>
-        <li class="menu-list">
-            favorite
-        </li>
-       
-    </ul>
-    </div>
-    <div class="container">
-        <div class="inner-container">
-
-            <div class="image"></div>
-
-            <div class="info">
-                <div class="mezmur-ditale">
-                    <div class="mezmur-name">mezmur name</div>
-                    <div class="artist-name">artist name</div>
-                </div>
-                <div class="favorite"></div>
-            </div>
-            
-            <div class="controls">
-                <div class="range-container">
-                <input type="range" class="seek-bar" value="0">
-                <div class="timer">
-                    <span class="current-time"></span>
-                    <span class="mezmur-duretion">00:00</span>
-                </div>
-            </div>
-                <div class="buttons">
-                    <div class="pri"><i class="fas fa-chevron-left"></i></div>
-                    <div class="play-btn"><i class="fas fa-play"></i></div>
-                    <div class="next"><i class="fas fa-chevron-right"></i></div>                
-                </div>
-            </div>
-            <div class="customization">
-                <div class="sherif-play">q</div>
-                <div class="to-up"><i class="fas fa-chevron-up"></i></div>
-                <div class="loop-paly">q</div>
-            </div>
+<div class="main-container">    
+    <nav class="main-nav-bar">
+        <div class="close">
+            <i class="fas fa-window-close"></i>
         </div>
-        <div class="feauther">
-        
-        <h2 class="title">next mezmurs</h2>
-        <ul class="feauther-lists">
+
+        <div class="container-of-the-main-menu">
+        <div class="profile">
+        <img src="./profile.jpg" alt="profile photo">
+        <h3 class="name-of-the-user">ananiya</h3>
+        <h4 class="email-of-the-user">ananiyafekede@gmail.com</h4>
+        </div>
+
+        <div class="menu">
+        <ul class="menu-lists">
+            <li class="menu-list active"> <span class="icon"><i class="fas fa-home"></i></span><span class="text">home</span></li>
+            <li class="menu-list"> <span  class="icon"> <i class="fas fa-list"></i></span><span class="text">play list</span></li>
+            <li class="menu-list"> <span  class="icon"> <i class="fas fa-star"></i></span><span class="text">favorite</span></li>
+            <li class="menu-list"> <span  class="icon"> <i class="fas fa-cog"></i></span><span class="text">setting</span></li>
+            <li class="menu-list"> <span  class="icon"> <i class="fas fa-info-circle"></i></span><span class="text">about</span></li>
         </ul>
         </div>
     </div>
-    <div class="favorite-container">
 
-        <h2 class="title">fev mezmurs</h2>
-        <ul class="fev-lists">
-        </ul>
-    </div>
+    </nav>
 
 
+    <section class="current-display">
 
+        <div class="current-image-container">
+            <img src="" class="current-image">
+        </div>
 
-    <script src="data.js"></script>
-    <script src="app.js"></script>
-    <script src="script.js"></script>
+        <div class="description-container">
+<span class="favorite-icon"><i class="fas fa-heart"></i></span>
+<div class="song-info">
+    <p class="song-name"></p>
+    <p class="songer-name"></p>
+</div>
+
+<span class="self-menu">
+    <i class="fas fa-ellipsis-v"></i>
+</span>
+        </div>
+
+            <div class="range-container">
+            <input type="range" class="seek-bar" value="0">
+            <div class="timer">
+                <span class="current-time"></span>
+                <span class="mezmur-duretion"></span>
+            </div>
+        </div>
+
+        <div class="controls">
+            <span> <i class="fas fa-random"></i></span>
+            <span class="previous"><i class="fas fa-step-backward"></i></span>
+            <span class="play pause"><i class="fas fa-play"></i></span>
+            <span class="next"> <i class="fas fa-step-forward"></i></span>
+            <span ><i class="fas fa-retweet"></i></span>
+        </div>
+
+    </section>
+
+<div class="play-list">
+<ul class="play-list-lists">
+</ul>
+</div>
+</div>
+
+<script src="data.js"></script>
+<script src="./app.js"></script>
 </body>
 </html>
