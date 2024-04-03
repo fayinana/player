@@ -1,87 +1,267 @@
-const toUp = document.querySelector('.to-up');
-const container = document.querySelector('.container')
-const customization = document.querySelector('.customization')
-const exit = document.querySelector('.exit')
-const menu = document.querySelector('.menu')
-const navBar = document.querySelector('.nav-bar')
-const fev = document.querySelector('.menu-list')
-const favoriteContainer = document.querySelector('.favorite-container')
-const feautherList = document.querySelectorAll('.feauther-list')
-const feautherInfo = document.querySelectorAll('.feauther-info')
-const fevList = document.querySelectorAll('.fev-list')
-const fevInfo = document.querySelectorAll('.fev-info')
+let currentSong = 0
+const song = document.querySelector('#audio');
+const forwardBtn = document.querySelector('.next');
+const backwardBtn = document.querySelector('.previous');
+const seekBar = document.querySelector('.seek-bar');
+const songName = document.querySelector('.song-name');
+const artistName = document.querySelector('.songer-name');
+const image = document.querySelector('.current-image');
+const currentTime = document.querySelector('.current-time');
+const songDuration = document.querySelector('.mezmur-duretion')
+const playBtn = document.querySelector('.play');
 
-feautherList.forEach(list =>{
-    list.addEventListener('click',()=>{
-        const feautherInfo = list.querySelector('.feauther-info')
-        isp = document.createElement('div')
-        isp.classList.add('is-playing')
-        isp.innerHTML = `
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        `
-        feautherInfo.append(isp)
-        isp.style.display = 'flex';
-    })
+
+// the functionality of displaying 
+
+
+playBtn.addEventListener('click', () => {
+    if (playBtn.classList.contains('pause')) {
+        song.play();
+        playBtn.innerHTML = '<i class="fas fa-pause"></i>'
+    } else {
+        song.pause();
+        playBtn.innerHTML = '<i class="fas fa-play"></i>'
+        
+    }    
+    playBtn.classList.toggle('pause');
+});  
+
+
+
+
+
+//   iterating over all song in the data.js  
+
+
+
+function setSong(i){
+    seekBar.value = 0;  
+    let Song = songs[i];  
+    currentSong = i;
+    song.src = Song.path;
+    songName.innerHTML = Song.name;
+    artistName.innerHTML = Song.artist
+    image.src = `${Song.cover}`   ;
+    
+    currentTime.innerHTML = '00:00'; 
+    
+    setTimeout(()=>{
+        seekBar.max = song.duration;
+        songDuration.innerHTML = formatTime(song.duration);   
+    },500)  
+}
+setSong(0)
+
+
+formatTime = (time)=>{
+    let min = Math.floor(time / 60);
+    if(min < 10){
+        min = `0${min}`
+    }    
+    let sec = Math.floor(time % 60);
+    if (sec < 10) {
+        sec = `0${sec}`
+ 
+    }    
+    return `${min}:${sec}`   
+}    
+
+
+
+
+
+
+
+
+const playSong = ()=>{
+    song.play()
+    playBtn.classList.remove('pause');
+    playBtn.innerHTML = '<i class="fas fa-pause"></i>'
+
+}
+
+
+
+setInterval(()=>{
+    seekBar.value = song.currentTime;
+    currentTime.innerHTML = formatTime(song.currentTime)
+},500)
+
+
+seekBar.addEventListener('change',()=>{
+    song.currentTime = seekBar.value;
+
 })
 
 
-fevList.forEach(list =>{
-    list.addEventListener('click',()=>{
-        const fevInfo = list.querySelector('.fev-info')
-        isp = document.createElement('div')
-        isp.classList.add('is-playing')
-        isp.innerHTML = `
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        `
-        fevInfo.append(isp)
-        isp.style.display = 'flex';
-    })
-})
-
-
-fev.addEventListener('click',()=>{
-favoriteContainer.style.display = 'flex'
-container.style.display = 'none'
-navBar.style.display = 'none';
-menu.style.display = 'flex';
-
-removeFromFev()
-})
-
-
-menu.addEventListener('click',()=>{
-menu.style.display = 'none';
-navBar.style.display = 'flex';
-})
-
-
-exit.addEventListener('click',()=>{
-navBar.style.display = 'none';
-menu.style.display = 'flex';
-})
-
-toUp.addEventListener('click',()=>{
-
-
-    if(container.classList.contains('container')){
-container.classList.remove('container');
-container.classList.add('container2');
-toUp.innerHTML = '<i class="fas fa-chevron-down"></i>'
-
+forwardBtn.addEventListener('click',()=>{
+if(currentSong >= songs.length - 1){
+    currentSong = 0
 }
 else{
-    container.classList.remove('container2');
-container.classList.add('container');
-toUp.innerHTML = '<i class="fas fa-chevron-up"></i>'
-
+    currentSong++
 }
 
+setSong(currentSong);
+playSong()
+});
+
+
+backwardBtn.addEventListener('click',()=>{
+if(currentSong <= 0){
+    currentSong = songs.length - 1
+}
+else{
+    currentSong--
+}
+
+setSong(currentSong);
+playSong()
+});
+
+
+
+
+const listItems = document.querySelector('.play-list-lists')
+
+songs.forEach((song,index) => {
+    
+    const listItem = document.createElement('li')
+    listItem.className = 'play-list-list';
+    listItemInnerHtml = `
+    <div class="play-list-image-container">
+    <img src="${song.cover}" alt="">
+</div>
+
+<div class="play-list-description-container">            
+    <div class="song-info">
+        <p class="song-name">${song.name}</p>
+        <p class="songer-name">${song.artist}</p>
+    </div>
+    <span class="favorite-icon"><i class="fas fa-heart"></i></span>
+</div>
+    `
+    setTimeout(() => {
+        const ffeevv = listItems.querySelectorAll('.favorite-icon')
+
+    if (song.isFev === true) {
+        ffeevv[index].style.background = 'red'
+    }
+}, 200);
+listItem.innerHTML = listItemInnerHtml
+listItems.appendChild(listItem)
+
+});
+
+
+
+const search = document.querySelector('.search');
+
+search.addEventListener('keyup',()=>{
+    listItems.innerHTML = ''
+    const selectedSong = songs.filter(song =>{  
+        return song.name.includes(search.value) || song.artist.includes(search.value)
+    })
+
+    selectedSong.forEach(song => {
+        const listItem = document.createElement('li')
+        listItem.className = 'play-list-list';
+        listItemInnerHtml = `
+        <div class="play-list-image-container">
+        <img src="${song.cover}" alt="">
+    </div>
+    
+    <div class="play-list-description-container">            
+        <div class="song-info">
+            <p class="song-name">${song.name}</p>
+            <p class="songer-name">${song.artist}</p>
+        </div>
+        <span class="favorite-icon"><i class="fas fa-heart"></i></span>
+    </div>
+        `
+
+        listItem.innerHTML = listItemInnerHtml
+        listItems.appendChild(listItem)
+
+    
+        
+    });
+
+})
+
+
+
+// adding the click and add in to the playing the current display
+
+
+
+
+setTimeout(() => {
+    const lists = document.querySelectorAll('.play-list-list') 
+    lists.forEach((listItem,index)=>{
+        const listItemBtn = listItem.querySelector('.song-info')
+        listItemBtn.addEventListener('click',()=>{
+            setSong(index);
+            playSong()
+        })
+    })
+}, 100);
+
+
+
+
+setTimeout(() => {
+    const lists = document.querySelectorAll('.play-list-list') 
+    lists.forEach((listItem,index)=>{
+        const listItemBtn = listItem.querySelector('.favorite-icon')
+        listItemBtn.addEventListener('click',()=>{
+            listItemBtn.classList.toggle('like')
+            listItemBtn.classList.toggle(index)
+
+        })
+    })
+}, 100);
+
+const likeElem = []
+
+setTimeout(() => {
+    const lists = document.querySelectorAll('.play-list-list') 
+    lists.forEach((listItem,index)=>{
+        const listItemBtn = listItem.querySelector('.favorite-icon');
+        listItemBtn.addEventListener('click',()=>{
+            indexOfDeletedElement = listItemBtn.classList.value.at(-1)
+           if (listItemBtn.classList.value.includes('like')) {
+             likeElem.push(listItemBtn.parentElement.parentElement)
+             console.log(likeElem);
+           }
+           else{
+            lists.forEach((list,indexOfElement) => {
+                if (indexOfDeletedElement == indexOfElement){
+                      
+                }
+            });
+           }
+        })
+    })
+}, 200);
+
+// nav bar functionality
+
+const navBar = document.querySelector('.nav-bar');
+const close = document.querySelector('.close');
+const mainNavBar = document.querySelector('.main-nav-bar');
+
+navBar.addEventListener('click', ()=>{
+navBar.style.visibility = 'hidden'
+mainNavBar.style.display = 'flex'
+search.style.display = 'none'
+
+})
+
+
+close.addEventListener('click', ()=>{
+    navBar.style.visibility = 'visible'
+    mainNavBar.style.display = 'none' 
 })
 
 
@@ -89,9 +269,10 @@ toUp.innerHTML = '<i class="fas fa-chevron-up"></i>'
 
 
 
+const searchBtn = document.querySelector('.search-btn');
+// const search = document.querySelector('.search');
 
-
-
-
-// a function to add a spicer in the playing mezmur
+searchBtn.addEventListener('click',()=>{
+    search.style.display = 'block'
+})
 
