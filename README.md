@@ -17,3 +17,7 @@ the first uploade have some html css and js functionality
 
 i change some html elements and css style and i add js for play pause and some other functionalities 
 and now i an working on the functionality of adding a fevourite list and some modification of css
+
+# day three updation april/3/2024
+
+in this updation i update the functionality of adding in to the fevourite and removing from the fevourite
