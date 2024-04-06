@@ -21,3 +21,10 @@ and now i an working on the functionality of adding a fevourite list and some mo
 # day three updation april/3/2024
 
 in this updation i update the functionality of adding in to the fevourite and removing from the fevourite
+
+
+# day four updation april/6/2024
+
+in this change i add all functionality of the like button 
+
+in the naxt i work on the full functionality of the filter muthode
