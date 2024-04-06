@@ -9,11 +9,42 @@ const image = document.querySelector('.current-image');
 const currentTime = document.querySelector('.current-time');
 const songDuration = document.querySelector('.mezmur-duretion')
 const playBtn = document.querySelector('.play');
+const mainContainer = document.querySelector('.current-display')
+const mainHeart = mainContainer.querySelector('.favorite-icon')
 
 const menuList = document.querySelectorAll('.menu-list');
 
+mainHeart.addEventListener('click',()=>{
+        const lists = document.querySelectorAll('.play-list-list') 
 
+        mainHeart.classList.toggle('like')
+        lists.forEach((list,index)=>{
+            if (mainHeart.dataset.index == index) {
+                const fevLike = list.querySelector('.favorite-icon')
+                fevLike.classList.toggle('like')
+            }
+           
+                
+            })
+})
 
+mainHeart.addEventListener('click',()=>{
+     if(mainHeart.classList.contains('like')){
+                theIndex = mainHeart.dataset.index;
+                addedElement = listsElement[theIndex]
+                const clonedItem = addedElement.cloneNode(true);
+                clonedItem.dataset.index = theIndex; 
+                fevBox.appendChild(clonedItem);
+            }
+            else{
+                 const fevItems = fevBox.querySelectorAll('.play-list-list');
+                fevItems.forEach((fevItem) => {
+                    if (fevItem.dataset.index === mainHeart.dataset.index) {
+                        fevBox.removeChild(fevItem);
+                    }
+                });
+            }
+})
 // the functionality of displaying 
 
 
@@ -24,10 +55,10 @@ playBtn.addEventListener('click', () => {
     } else {
         song.pause();
         playBtn.innerHTML = '<i class="fas fa-play"></i>'
-
-    }
+        
+    }    
     playBtn.classList.toggle('pause');
-});
+});  
 
 
 
@@ -37,46 +68,46 @@ playBtn.addEventListener('click', () => {
 
 
 
-function setSong(i) {
-    seekBar.value = 0;
-    let Song = songs[i];
+function setSong(i){
+    seekBar.value = 0;  
+    let Song = songs[i];  
     currentSong = i;
     song.src = Song.path;
     songName.innerHTML = Song.name;
     artistName.innerHTML = Song.artist
-    image.src = `${Song.cover}`;
-
-    currentTime.innerHTML = '00:00';
-
-    setTimeout(() => {
+    image.src = `${Song.cover}`   ;
+    
+    currentTime.innerHTML = '00:00'; 
+       mainHeart.dataset.index = i;
+    setTimeout(()=>{
         seekBar.max = song.duration;
-        songDuration.innerHTML = formatTime(song.duration);
-    }, 500)
+        songDuration.innerHTML = formatTime(song.duration);   
+    },500)  
 }
 setSong(0)
 
 
-formatTime = (time) => {
+formatTime = (time)=>{
     let min = Math.floor(time / 60);
-    if (min < 10) {
+    if(min < 10){
         min = `0${min}`
-    }
+    }    
     let sec = Math.floor(time % 60);
     if (sec < 10) {
         sec = `0${sec}`
-
-    }
-    return `${min}:${sec}`
-}
-
-
+ 
+    }    
+    return `${min}:${sec}`   
+}    
 
 
 
 
 
 
-const playSong = () => {
+
+
+const playSong = ()=>{
     song.play()
     playBtn.classList.remove('pause');
     playBtn.innerHTML = '<i class="fas fa-pause"></i>'
@@ -85,41 +116,59 @@ const playSong = () => {
 
 
 
-setInterval(() => {
+setInterval(()=>{
     seekBar.value = song.currentTime;
     currentTime.innerHTML = formatTime(song.currentTime)
-}, 500)
+},500)
 
 
-seekBar.addEventListener('change', () => {
+seekBar.addEventListener('change',()=>{
     song.currentTime = seekBar.value;
 
 })
 
 
-forwardBtn.addEventListener('click', () => {
-    if (currentSong >= songs.length - 1) {
-        currentSong = 0
-    }
-    else {
-        currentSong++
-    }
+forwardBtn.addEventListener('click',()=>{
+if(currentSong >= songs.length - 1){
+    currentSong = 0
+}
+else{
+    currentSong++
+}
 
-    setSong(currentSong);
-    playSong()
+setSong(currentSong);
+const listItems = document.querySelectorAll('.play-list-list')
+const isLiked = listItems[currentSong].querySelector('.favorite-icon') 
+if (isLiked.classList.contains('like')) {
+    mainHeart.classList.add('like')
+}
+else{
+    mainHeart.classList.remove('like')
+
+}
+playSong()
 });
 
 
-backwardBtn.addEventListener('click', () => {
-    if (currentSong <= 0) {
-        currentSong = songs.length - 1
-    }
-    else {
-        currentSong--
-    }
+backwardBtn.addEventListener('click',()=>{
+if(currentSong <= 0){
+    currentSong = songs.length - 1
+}
+else{
+    currentSong--
+}
 
-    setSong(currentSong);
-    playSong()
+const listItems = document.querySelectorAll('.play-list-list')
+const isLiked = listItems[currentSong].querySelector('.favorite-icon') 
+if (isLiked.classList.contains('like')) {
+    mainHeart.classList.add('like')
+}
+else{
+    mainHeart.classList.remove('like')
+
+}
+setSong(currentSong);
+playSong()
 });
 
 
@@ -127,8 +176,8 @@ backwardBtn.addEventListener('click', () => {
 
 const listItems = document.querySelector('.play-list-lists')
 
-songs.forEach((song, index) => {
-
+songs.forEach((song,index) => {
+    
     const listItem = document.createElement('li')
     listItem.className = 'play-list-list';
     listItemInnerHtml = `
@@ -144,15 +193,8 @@ songs.forEach((song, index) => {
     <span class="favorite-icon"><i class="fas fa-heart"></i></span>
 </div>
     `
-    setTimeout(() => {
-        const ffeevv = listItems.querySelectorAll('.favorite-icon')
-
-        if (song.isFev === true) {
-            ffeevv[index].style.background = 'red'
-        }
-    }, 200);
-    listItem.innerHTML = listItemInnerHtml
-    listItems.appendChild(listItem)
+listItem.innerHTML = listItemInnerHtml
+listItems.appendChild(listItem)
 
 });
 
@@ -166,11 +208,21 @@ songs.forEach((song, index) => {
 
 
 setTimeout(() => {
-    const lists = document.querySelectorAll('.play-list-list')
-    lists.forEach((listItem, index) => {
-        const listItemBtn = listItem.querySelector('.song-info')
-        listItemBtn.addEventListener('click', () => {
-            setSong(index);
+    const lists = document.querySelectorAll('.play-list-list') 
+    lists.forEach((listItem,index)=>{
+        const newDisplay = listItem.querySelector('.song-info')
+        newDisplay.addEventListener('click',()=>{
+         
+            const clonedItem = listItem.cloneNode(true);
+         
+            const isLike = listItem.querySelector('.favorite-icon')
+            if (isLike.classList.contains('like')) {
+                mainHeart.classList.add('like')
+            }
+            else{
+                mainHeart.classList.remove('like')
+            }
+               setSong(index,clonedItem);
             playSong()
         })
     })
@@ -183,38 +235,56 @@ const listsElement = document.querySelectorAll('.play-list-list');
 const fevBox = document.querySelector('.fev-lists');
 
 listsElement.forEach((listItem, index) => {
-    const listItemBtn = listItem.querySelector('.favorite-icon');
-    listItemBtn.addEventListener('click', () => {
-        listItemBtn.classList.toggle('like');
+  const listItemBtn = listItem.querySelector('.favorite-icon');
+  listItemBtn.addEventListener('click', () => {
+    listItemBtn.classList.toggle('like');
 
+    if (mainHeart.dataset.index == index  ) {
+        
         if (listItemBtn.classList.contains('like')) {
-            const clonedItem = listItem.cloneNode(true);
-            clonedItem.dataset.index = index;
-            fevBox.appendChild(clonedItem);
-        } else {
-            const fevItems = fevBox.querySelectorAll('.play-list-list');
-            fevItems.forEach((fevItem) => {
-                if (fevItem.dataset.index === index.toString()) {
-                    fevBox.removeChild(fevItem);
-                    listItemBtn.classList.remove('like');
-                }
-            });
+                mainHeart.classList.add('like')
+                
+            }
+            else{
+                mainHeart.classList.remove('like')
+            }
         }
-    });
+
+    if (listItemBtn.classList.contains('like')) {
+        theIndex = mainHeart.dataset.index;
+       addedElement = listsElement[theIndex]
+       const clonedItem = listItem.cloneNode(true);
+        clonedItem.dataset.index = index; 
+        fevBox.appendChild(clonedItem);
+
+
+    } 
+    
+    else {
+      const fevItems = fevBox.querySelectorAll('.play-list-list');
+      fevItems.forEach((fevItem) => {
+        if (fevItem.dataset.index === index.toString()) {
+          fevBox.removeChild(fevItem);
+          listItemBtn.classList.remove('like'); 
+        }
+       
+      });
+    }
+  });
 });
 
 
 const favorite = document.querySelector('.favorite');
 const home = document.querySelector('.home');
 
-favorite.addEventListener('click', () => {
+favorite.addEventListener('click',()=>{
     const lists = document.querySelector('.play-list')
     const fev = document.querySelector('.fevorites')
     lists.style.display = 'none'
     fev.style.display = 'block'
 })
 
-home.addEventListener('click', () => {
+home.addEventListener('click',()=>{
     const lists = document.querySelector('.play-list')
     const fev = document.querySelector('.fevorites')
     lists.style.display = 'block'
@@ -223,29 +293,30 @@ home.addEventListener('click', () => {
 
 
 
-favorite.addEventListener('click', () => {
-    fevItemList = fevBox.querySelectorAll('.play-list-list')
+favorite.addEventListener('click', ()=>{
+fevItemList = fevBox.querySelectorAll('.play-list-list')
 
     if (fevItemList.length > 0) {
-        fevItemList.forEach((likedList, index) => {
+      fevItemList.forEach((likedList,index) =>{
             const isClicked = likedList.querySelector('.favorite-icon')
-            isClicked.addEventListener('click', () => {
+            isClicked.addEventListener('click',()=>{
                 fevBox.removeChild(isClicked.parentElement.parentElement)
-                const lists = document.querySelectorAll('.play-list-list')
-                lists.forEach((list, index) => {
-                    if (likedList.dataset.index == index) {
-                        const clearedList = list.querySelector('.favorite-icon')
-                        clearedList.classList.remove('like')
-                    }
+                const lists = document.querySelectorAll('.play-list-list') 
+lists.forEach((list,index)=>{
+if (likedList.dataset.index == index) {
+    const clearedList = list.querySelector('.favorite-icon')
+    clearedList.classList.remove('like')
+}
 
-                })
+    if(mainHeart.dataset.index == index) {
+        mainHeart.classList.remove('like')
+    }
+})
             })
 
-        })
+      })
     }
-    else {
-
-    }
+   
 })
 
 
@@ -255,9 +326,9 @@ favorite.addEventListener('click', () => {
 
 const search = document.querySelector('.search');
 
-search.addEventListener('keyup', () => {
+search.addEventListener('keyup',()=>{
     listItems.innerHTML = ''
-    const selectedSong = songs.filter(song => {
+    const selectedSong = songs.filter(song =>{  
         return song.name.includes(search.value) || song.artist.includes(search.value)
     })
 
@@ -281,8 +352,8 @@ search.addEventListener('keyup', () => {
         listItem.innerHTML = listItemInnerHtml
         listItems.appendChild(listItem)
 
-
-
+    
+        
     });
 
 })
@@ -295,17 +366,17 @@ const navBar = document.querySelector('.nav-bar');
 const close = document.querySelector('.close');
 const mainNavBar = document.querySelector('.main-nav-bar');
 
-navBar.addEventListener('click', () => {
-    navBar.style.visibility = 'hidden'
-    mainNavBar.style.display = 'flex'
-    search.style.display = 'none'
+navBar.addEventListener('click', ()=>{
+navBar.style.visibility = 'hidden'
+mainNavBar.style.display = 'flex'
+search.style.display = 'none'
 
 })
 
 
-close.addEventListener('click', () => {
+close.addEventListener('click', ()=>{
     navBar.style.visibility = 'visible'
-    mainNavBar.style.display = 'none'
+    mainNavBar.style.display = 'none' 
 })
 
 
@@ -315,7 +386,7 @@ close.addEventListener('click', () => {
 
 const searchBtn = document.querySelector('.search-btn');
 
-searchBtn.addEventListener('click', () => {
+searchBtn.addEventListener('click',()=>{
     search.style.display = 'block'
 })
 
@@ -326,11 +397,11 @@ searchBtn.addEventListener('click', () => {
 
 
 
-menuList.forEach(menu => {
-    menu.addEventListener('click', () => {
-        menuList.forEach(menus => {
-            menus.classList.remove('active')
-        })
+menuList.forEach(menu =>{
+    menu.addEventListener('click',()=>{
+    menuList.forEach(menus =>{
+        menus.classList.remove('active')
+    })
         menu.classList.add('active')
     })
-})
+} )
